@@ -51,15 +51,15 @@ def binary_search_lis(arr: list[int]) -> list[int]:
 
 
 if __name__ == "__main__":
-    a = random_list(50)
-    print(a)
+    a = random_list(100)
+    print(f'Original List:\n{a}\nLength: {len(a)}')
 
     start_time = time.time()
     lis = naive_lis(a)
     runtime_naive = time.time() - start_time
-    print(f'\n{lis}\nLength: {len(lis)}\n{runtime_naive:.2f} sec')
+    print(f'\nNaive Solution:\n{lis}\nLength: {len(lis)}\n{runtime_naive:.2f} sec')
 
     start_time = time.time()
     lis = binary_search_lis(a)
     runtime_naive = time.time() - start_time
-    print(f'\n{lis}\nLength: {len(lis)}\n{runtime_naive:.2f} sec')
+    print(f'\nBinary Search Solution:\n{lis}\nLength: {len(lis)}\n{runtime_naive:.2f} sec')
