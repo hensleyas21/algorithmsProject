@@ -29,17 +29,37 @@ def naive_lis(arr: list[int]) -> list[int]:
             max_lis = lis_i
     return max_lis
 
+def binary_search_lis(arr: list[int]) -> list[int]:
+    if len(arr) == 0:
+        return []
+    
+    lis = [arr[0]]
+    for i in range(1, len(arr)):
+        if arr[i] > lis[-1]:
+            lis.append(arr[i])
+        else:
+            low_idx = 0
+            high_idx = len(lis) - 1
+            while low_idx < high_idx:
+                midpoint = (high_idx + low_idx) // 2
+                if lis[midpoint] < arr[i]:
+                    low_idx = midpoint + 1
+                else:
+                    high_idx = midpoint
+            lis[low_idx] = arr[i]
+    return lis
+
 
 if __name__ == "__main__":
-    a = random_list(30)
+    a = random_list(50)
     print(a)
 
     start_time = time.time()
     lis = naive_lis(a)
     runtime_naive = time.time() - start_time
-    print(f'{lis}\nLength: {len(lis)}\n{runtime_naive:.2f} sec\n')
+    print(f'\n{lis}\nLength: {len(lis)}\n{runtime_naive:.2f} sec')
 
     start_time = time.time()
-    lis = memoized_lis(a)
-    runtime_memoized = time.time() - start_time
-    print(f'{lis}\nLength: {len(lis)}\n{runtime_memoized:.2f} sec')
+    lis = binary_search_lis(a)
+    runtime_naive = time.time() - start_time
+    print(f'\n{lis}\nLength: {len(lis)}\n{runtime_naive:.2f} sec')
