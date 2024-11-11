@@ -59,7 +59,7 @@ if __name__ == '__main__':
     # strictly increase test
 
     def run_test(generator):
-        seqs = [generator(n=i) for i in [10, 50]]
+        seqs = [generator(n=n) for n in [10, 50]]
         for seq in seqs:
             start_time = time.time()
             main.naive_lis(seq)
