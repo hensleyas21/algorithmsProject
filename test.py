@@ -58,31 +58,30 @@ class Sequences:
 if __name__ == '__main__':
     # strictly increase test
 
-    def run_test(generator):
-        seqs = [generator(n=n) for n in [10, 50]]
+    def run_test(generator, amount: list[int]):
+        seqs = [generator(n=n) for n in amount]
         for seq in seqs:
+            print(f"Started {generator.__name__} for n={len(seq)}")
             start_time = time.time()
             main.naive_lis(seq)
             total_time = time.time() - start_time
-            print(f"Naive solution for n={len(seq)} on {generator.__name__}: {total_time:.2f} sec")        
+            print(f"Naive solution for n={len(seq)} on {generator.__name__}: {total_time} sec")        
             start_time = time.time()
             main.binary_search_lis(seq)
             total_time = time.time() - start_time
-            print(f"Efficient solution for n={len(seq)} on {generator.__name__}: {total_time:.2f} sec")    
-            
-    t1 = multiprocessing.Process(target=run_test(Sequences.strictly_increase))
-    t1.start()
-    t2 = multiprocessing.Process(target=run_test(Sequences.strictly_decrease))
-    t2.start()
-    t3 = multiprocessing.Process(target=run_test(Sequences.alternating_high_low))
-    t3.start()
-    t4 = multiprocessing.Process(target=run_test(Sequences.constant))
-    t4.start()
-    t5 = multiprocessing.Process(target=run_test(Sequences.zig_zag))
-    t5.start()
-    t6 = multiprocessing.Process(target=run_test(Sequences.repeated_pattern))
-    t6.start()
-    t7 = multiprocessing.Process(target=run_test(Sequences.random))
-    t7.start()
+            print(f"Efficient solution for n={len(seq)} on {generator.__name__}: {total_time} sec")    
 
-    
+    t1 = multiprocessing.Process(target=run_test(Sequences.strictly_increase, [10, 20, 30]))
+    t1.start()
+    t2 = multiprocessing.Process(target=run_test(Sequences.strictly_decrease, [10, 20, 30]))
+    t2.start()
+    t3 = multiprocessing.Process(target=run_test(Sequences.alternating_high_low, [10, 20, 30]))
+    t3.start()
+    t4 = multiprocessing.Process(target=run_test(Sequences.constant,[10, 20, 30]))
+    t4.start()
+    t5 = multiprocessing.Process(target=run_test(Sequences.zig_zag, [10, 20, 30]))
+    t5.start()
+    t6 = multiprocessing.Process(target=run_test(Sequences.repeated_pattern, [10, 20, 30]))
+    t6.start()
+    t7 = multiprocessing.Process(target=run_test(Sequences.random, [10, 20, 30]))
+    t7.start()
