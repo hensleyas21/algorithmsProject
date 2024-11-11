@@ -1,7 +1,7 @@
 import main
 import time
 import random
-
+import multiprocessing
 import random
 
 # messing around with stuff
@@ -55,10 +55,34 @@ class Sequences:
         return random.choices(range(1, n + 1), k=n)
 
 
-
 if __name__ == '__main__':
-    a = main.random_list(10000000)
-    start_time = time.time()
-    lis = main.binary_search_lis(a)
-    runtime_naive = time.time() - start_time
-    print(f'Binary Search Solution:\n{lis}\nLength: {len(lis)}\n{runtime_naive:.2f} sec')
+    # strictly increase test
+
+    def run_test(generator):
+        seqs = [generator(n=i) for i in [10, 50]]
+        for seq in seqs:
+            start_time = time.time()
+            main.naive_lis(seq)
+            total_time = time.time() - start_time
+            print(f"Naive solution for n={len(seq)} on {generator.__name__}: {total_time:.2f} sec")        
+            start_time = time.time()
+            main.binary_search_lis(seq)
+            total_time = time.time() - start_time
+            print(f"Efficient solution for n={len(seq)} on {generator.__name__}: {total_time:.2f} sec")    
+            
+    t1 = multiprocessing.Process(target=run_test(Sequences.strictly_increase))
+    t1.start()
+    t2 = multiprocessing.Process(target=run_test(Sequences.strictly_decrease))
+    t2.start()
+    t3 = multiprocessing.Process(target=run_test(Sequences.alternating_high_low))
+    t3.start()
+    t4 = multiprocessing.Process(target=run_test(Sequences.constant))
+    t4.start()
+    t5 = multiprocessing.Process(target=run_test(Sequences.zig_zag))
+    t5.start()
+    t6 = multiprocessing.Process(target=run_test(Sequences.repeated_pattern))
+    t6.start()
+    t7 = multiprocessing.Process(target=run_test(Sequences.random))
+    t7.start()
+
+    
