@@ -2,15 +2,17 @@ import main
 import time
 import random
 
+import random
+
 # messing around with stuff
 class Sequences:
     @staticmethod
-    def strickly_increase(n: int = 100) -> list[int]:
+    def strictly_increase(n: int = 100) -> list[int]:
         return list(range(1, n + 1))
 
     @staticmethod
-    def strickly_decrease(n: int = 100) -> list[int]:
-        return list(range(n + 1, 1, -1))
+    def strictly_decrease(n: int = 100) -> list[int]:
+        return list(range(n, 0, -1))
     
     @staticmethod
     def alternating_high_low(n: int = 100) -> list[int]:
@@ -27,12 +29,12 @@ class Sequences:
     @staticmethod
     def constant(n: int = 100) -> list[int]:
         constant = random.random()
-        return [constant for _ in random(1, n + 1)]
+        return [constant for _ in range(1, n + 1)]
     
     @staticmethod
     def zig_zag(n: int = 100) -> list[int]:
         sequence = []
-        for i in range(1, n):
+        for i in range(1, n + 1):
             if i % 2 == 1:
                 sequence.append(i + 1)
             else:
@@ -40,18 +42,18 @@ class Sequences:
         return sequence
     
     @staticmethod
-    # TODO: fix
     def repeated_pattern(n: int = 100) -> list[int]:
         if n % 2 == 1:
-            pattern = [random.random() for _ in range(3)]
-            return [num for num in pattern for _ in range(0, n, 3)]
+            pattern = [random.randint(1, 10) for _ in range(3)]
+            return (pattern * ((n // 3) + 1))[:n]
         else:
-            pattern = [random.random() for _ in range(2)]
-            return [num for num in pattern for _ in range(0, n, 2)]
+            pattern = [random.randint(1, 10) for _ in range(2)]
+            return (pattern * ((n // 2) + 1))[:n]
 
     @staticmethod
-    def random_sequence(n: int = 100) -> list[int]:
-        return main.random_list(n)
+    def random(n: int = 100) -> list[int]:
+        return random.choices(range(1, n + 1), k=n)
+
 
 
 if __name__ == '__main__':
