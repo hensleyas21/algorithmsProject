@@ -67,15 +67,15 @@ def test():
             print(f"Efficient solution avg for n={len(seq)} on {generator.__name__}: {(total_efficient / 10):.5f} ms")        
 
 
-    # t1 = multiprocessing.Process(target=run_test(Sequences.strictly_increase, [5, 10, 15, 20, 25], verbose=False))
-    # t1.start()
-    # t2 = multiprocessing.Process(target=run_test(Sequences.strictly_decrease, [5, 10, 15, 20, 25], verbose=False))
-    # t2.start()
-    # t3 = multiprocessing.Process(target=run_test(Sequences.alternating_high_low, [5, 10, 15, 20, 25, 30], verbose=False))
-    # t3.start()
-    # t4 = multiprocessing.Process(target=run_test(Sequences.zig_zag, [5, 10, 15, 20, 25], verbose=False))
-    # t4.start()
-    t5 = multiprocessing.Process(target=run_test(Sequences.random, [100, 1000], verbose=False))
+    t1 = multiprocessing.Process(target=run_test(Sequences.strictly_increase, [5, 10, 15, 20, 25], verbose=False))
+    t1.start()
+    t2 = multiprocessing.Process(target=run_test(Sequences.strictly_decrease, [5, 10, 15, 20, 25], verbose=False))
+    t2.start()
+    t3 = multiprocessing.Process(target=run_test(Sequences.alternating_high_low, [5, 10, 15, 20, 25, 30], verbose=False))
+    t3.start()
+    t4 = multiprocessing.Process(target=run_test(Sequences.zig_zag, [5, 10, 15, 20, 25], verbose=False))
+    t4.start()
+    t5 = multiprocessing.Process(target=run_test(Sequences.random, [5, 10, 15, 20, 25], verbose=False))
     t5.start()  
     
 if __name__ == '__main__':
