@@ -1,9 +1,6 @@
 import time
 import random
-
-# generates a list of length n filled with random integers [1, n]
-def random_list(n: int) -> list[int]:
-    return [random.randint(1, n) for _ in range(n)]
+from test import Sequences
 
 # the recursive step of the naive solution for finding longest increasing subsequence
 # this method should not be called directly, use naive_lis(arr) instead
@@ -60,14 +57,12 @@ def binary_search_lis(arr: list[int]) -> list[int]:
 
 
 if __name__ == "__main__":
-    a = random_list(50)
+    a = Sequences.random(50)
     print(f'Original List:\n{a}\nLength: {len(a)}')
-
     start_time = time.time()
     lis = naive_lis(a)
     runtime_naive = time.time() - start_time
     print(f'\nNaive Solution:\n{lis}\nLength: {len(lis)}\n{runtime_naive:.2f} sec')
-
     start_time = time.time()
     lis = binary_search_lis(a)
     runtime_naive = time.time() - start_time
