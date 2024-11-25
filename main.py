@@ -1,5 +1,4 @@
 import time
-import random
 from test import Sequences
 
 # the recursive step of the naive solution for finding longest increasing subsequence
