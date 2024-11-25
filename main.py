@@ -1,5 +1,5 @@
 import time
-from test import Sequences
+# from test import Sequences
 
 # the recursive step of the naive solution for finding longest increasing subsequence
 # this method should not be called directly, use naive_lis(arr) instead
@@ -35,28 +35,46 @@ def naive_lis(arr: list[int]) -> list[int]:
 def binary_search_lis(arr: list[int]) -> list[int]:
     if len(arr) == 0:
         return []
-    
+
     lis = [arr[0]]
+    indices = [0]
+    pred = [-1] * len(arr)
+
     for i in range(1, len(arr)):
-        # if the next value of arr is greater than the last value in the LIS, add it to the LIS.
-        # otherwise, use binary search to find where arr[i] goes in the LIS and substitute the existing value in the LIS with arr[i]
         if arr[i] > lis[-1]:
+            pred[i] = indices[-1]
             lis.append(arr[i])
+            indices.append(i)
         else:
-            low_idx = 0
-            high_idx = len(lis) - 1
-            while low_idx < high_idx:
-                midpoint = (high_idx + low_idx) // 2
-                if lis[midpoint] < arr[i]:
-                    low_idx = midpoint + 1
+            low = 0
+            high = len(lis) - 1
+            while low < high:
+                mid = (high + low) // 2
+                if lis[mid] < arr[i]:
+                    low = mid + 1
                 else:
-                    high_idx = midpoint
-            lis[low_idx] = arr[i]
-    return lis
+                    high = mid
+            lis[low] = arr[i]
+            indices[low] = i
+            if low > 0:
+                pred[i] = indices[low-1]
+    
+    max_lis = []
+    k = indices[-1]
+    while k >= 0:
+        max_lis.append(arr[k])
+        k = pred[k]
+    max_lis.reverse()
+    return max_lis
 
 
 if __name__ == "__main__":
-    a = Sequences.random(50)
+    # a = Sequences.random(50)
+    a = [34, 1, 56, 47, 13, 52, 25, 12, 70, 39, 9, 66, 37, 48, 63, 45, 50, 8, 67, 5, 
+ 17, 31, 3, 29, 41, 18, 53, 72, 33, 38, 69, 7, 71, 30, 21, 73, 40, 19, 24, 15, 
+ 28, 55, 44, 35, 46, 4, 36, 61, 68, 26, 62, 20, 60, 51, 10, 11, 49, 59, 32, 74, 
+ 14, 22, 16, 64, 65, 23, 58, 2, 27, 75, 42, 43, 57, 74, 76, 48, 13, 71, 66, 49]
+
     print(f'Original List:\n{a}\nLength: {len(a)}')
     start_time = time.time()
     lis = naive_lis(a)
