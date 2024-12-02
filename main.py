@@ -2,6 +2,7 @@ import time
 # from test import Sequences
 
 # the recursive step of the naive solution for finding longest increasing subsequence
+# that includes the final element in the list
 # this method should not be called directly, use naive_lis(arr) instead
 def naive_lis_recursive(arr: list[int]) -> list[int]:
     if len(arr) <= 1:
