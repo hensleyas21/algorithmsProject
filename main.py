@@ -5,20 +5,20 @@ import time
 # the LIS that includes the final element in the inputted list
 #
 # this method should not be called directly, use naive_lis(arr) instead
-def naive_lis_recursive(arr: list[int]) -> list[int]:
-    if len(arr) <= 1:
-        return arr
+def naive_lis_recursive(subarr: list[int]) -> list[int]:
+    if len(subarr) <= 1:
+        return subarr
     
-    max_lis = [arr[-1]]
+    max_lis = [subarr[-1]]
 
-    for i in range(len(arr)):
-        if arr[i] < arr[-1]:
-            lis_i = naive_lis_recursive(arr[:i+1])
+    for i in range(len(subarr)):
+        if subarr[i] < subarr[-1]:
+            lis_i = naive_lis_recursive(subarr[:i+1])
             if len(max_lis) < len(lis_i) + 1:
                 max_lis = lis_i
     
-    if len(max_lis) > 0 and max_lis[-1] < arr[-1]:
-        max_lis.append(arr[-1])
+    if len(max_lis) > 0 and max_lis[-1] < subarr[-1]:
+        max_lis.append(subarr[-1])
     
     return max_lis
 
