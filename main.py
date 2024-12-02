@@ -35,43 +35,45 @@ def naive_lis(arr: list[int]) -> list[int]:
 
 # finds the longest increasing subsequence using the binary tree solution
 def binary_search_lis(arr: list[int]) -> list[int]:
-    if len(arr) == 0:
-        return []
+    pred = [None] * len(arr)
+    min_end_index = [-1] * (len(arr)+1)
 
-    lis = [arr[0]]
-    indices = [0]
-    pred = [-1] * len(arr)
-
-    for i in range(1, len(arr)):
-        if arr[i] > lis[-1]:
-            pred[i] = indices[-1]
-            lis.append(arr[i])
-            indices.append(i)
-        else:
-            low = 0
-            high = len(lis) - 1
-            while low < high:
-                mid = (high + low) // 2
-                if lis[mid] < arr[i]:
-                    low = mid + 1
-                else:
-                    high = mid
-            lis[low] = arr[i]
-            indices[low] = i
-            if low > 0:
-                pred[i] = indices[low-1]
+    lis_len = 0
     
-    max_lis = []
-    k = indices[-1]
-    while k >= 0:
-        max_lis.append(arr[k])
-        k = pred[k]
-    max_lis.reverse()
-    return max_lis
+    # binary search to find the position where arr[i] can replace or extend the LIS
+    for i in range(len(arr)):
+        low = 1
+        high = lis_len + 1
+        while low < high:
+            mid = low + (high-low)//2
+            if arr[min_end_index[mid]] >= arr[i]:
+                high = mid
+            else:
+                low = mid + 1
+        new_lis_len = low
 
+        # store the index of the predecessor for arr[i], which is the last element in subsequence of length new_lis_len-1
+        pred[i] = min_end_index[new_lis_len-1]
+
+        # update min_end_index for the subsequence of length new_lis_len with the current element's index
+        min_end_index[new_lis_len] = i
+
+        # if a longer subsequence is found, update lis_len
+        if new_lis_len > lis_len:
+            lis_len = new_lis_len
+
+    # reconstuct the LIS beginning with the last element in min_end_index
+    # use pred to find the element that belongs before until the LIS is complete
+    s = [None] * lis_len
+    k = min_end_index[lis_len]
+    for i in range(lis_len-1, -1, -1):
+        s[i] = arr[k]
+        k = pred[k]
+    
+    return s
+    
 
 if __name__ == "__main__":
-    # a = Sequences.random(50)
     a = [34, 1, 56, 47, 13, 52, 25, 12, 70, 39, 9, 66, 37, 48, 63, 45, 50, 8, 67, 5, 
  17, 31, 3, 29, 41, 18, 53, 72, 33, 38, 69, 7, 71, 30, 21, 73, 40, 19, 24, 15, 
  28, 55, 44, 35, 46, 4, 36, 61, 68, 26, 62, 20, 60, 51, 10, 11, 49, 59, 32, 74, 
