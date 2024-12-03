@@ -1,7 +1,6 @@
 import main
 import time
 import random
-import multiprocessing
 import csv
 
 
@@ -41,21 +40,27 @@ class Sequences:
         return random.choices(range(1, n + 1), k=n)
 
 
-def run_test(generator, amounts, queue):
+def run_test(generator, amounts, verbose: bool = False, naive: bool = True, efficient: bool = True):
     results = []
     for n in amounts:
         seq = generator(n=n)
-        for _ in range(10):
-            start_time = time.time()
-            main.naive_lis(seq)
-            naive_time = (time.time() - start_time) * 1000
-            results.append((generator.__name__, n, "Naive", naive_time))
+        if verbose and naive: print(f"running n={n} for {generator.__name__} on naive")
+        if verbose and efficient: print(f"running n={n} for {generator.__name__} on efficient")
 
-            start_time = time.time()
-            main.binary_search_lis(seq)
-            efficient_time = (time.time() - start_time) * 1000
-            results.append((generator.__name__, n, "Efficient", efficient_time))
-    queue.put(results)
+        for _ in range(10):
+            if naive:
+                start_time = time.time()
+                main.naive_lis(seq)
+                naive_time = (time.time() - start_time) * 1000
+                results.append((generator.__name__, n, "Naive", naive_time))
+
+
+            if efficient:
+                start_time = time.time()
+                main.binary_search_lis(seq)
+                efficient_time = (time.time() - start_time) * 1000
+                results.append((generator.__name__, n, "Efficient", efficient_time))
+    return results
 
 
 def test():
@@ -67,24 +72,27 @@ def test():
         Sequences.random,
     ]
     n_values = [5, 10, 15, 20, 25]
-    queue = multiprocessing.Queue()
-    processes = []
 
-    for generator in sequence_generators:
-        process = multiprocessing.Process(target=run_test, args=(generator, n_values, queue))
-        processes.append(process)
-        process.start()
-
-    for process in processes:
-        process.join()
-
-    # Collect results from all processes
+    # Collect results sequentially
     results = []
-    while not queue.empty():
-        results.extend(queue.get())
+    for generator in sequence_generators:
+        results.extend(run_test(generator, n_values, verbose=True, efficient=False))
 
     # Write results to a CSV file
-    with open("test_results.csv", "w", newline="") as csvfile:
+    with open("test_results_naive.csv", "w", newline="") as csvfile:
+        writer = csv.writer(csvfile)
+        writer.writerow(["Sequence", "n", "Algorithm", "Time (ms)"])
+        writer.writerows(results)
+
+    results = []
+    results.extend(run_test(Sequences.strictly_increase, n_values + [10 ** 2, 10 ** 3, 10 ** 4, 10 ** 5, 10 ** 6, 10 ** 7], verbose=True, naive=False))
+    results.extend(run_test(Sequences.strictly_decrease, n_values + [10 ** 2, 10 ** 4, 10 ** 5, 10 ** 6, 10 ** 7], verbose=True, naive=False))
+    results.extend(run_test(Sequences.alternating_high_low, n_values + [10 ** 2, 10 ** 3, 10 ** 4, 10 ** 5, 10 ** 6, 10 ** 7], verbose=True, naive=False))
+    results.extend(run_test(Sequences.zig_zag, n_values + [10 ** 2, 10 ** 3, 10 ** 4, 10 ** 5, 10 ** 6, 10 ** 7], verbose=True, naive=False))
+    results.extend(run_test(Sequences.random, n_values + [10 ** 2, 10 ** 3, 10 ** 4, 10 ** 5, 10 ** 6, 10 ** 7], verbose=True, naive=False))
+
+  # Write results to a CSV file
+    with open("test_results_efficient.csv", "w", newline="") as csvfile:
         writer = csv.writer(csvfile)
         writer.writerow(["Sequence", "n", "Algorithm", "Time (ms)"])
         writer.writerows(results)
@@ -92,3 +100,4 @@ def test():
 
 if __name__ == "__main__":
     test()
+    
