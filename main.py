@@ -39,17 +39,21 @@ def binary_search_lis(arr: list[int]) -> list[int]:
 
     lis_len = 0
     
-    # binary search to find the position where arr[i] can replace or extend the LIS
     for i in range(len(arr)):
-        low = 1
-        high = lis_len + 1
-        while low < high:
-            mid = low + (high-low)//2
-            if arr[min_end_index[mid]] >= arr[i]:
-                high = mid
-            else:
-                low = mid + 1
-        new_lis_len = low
+        # if arr[i] is greater than all elements in the current LIS, add it to the end
+        # otherwise, use binary search to find the position where arr[i] can replace or extend the LIS
+        if lis_len == 0 or arr[i] > arr[min_end_index[lis_len]]:
+            new_lis_len = lis_len + 1
+        else:
+            low = 1
+            high = lis_len + 1
+            while low < high:
+                mid = low + (high-low)//2
+                if arr[min_end_index[mid]] >= arr[i]:
+                    high = mid
+                else:
+                    low = mid + 1
+            new_lis_len = low
 
         # store the index of the predecessor for arr[i], which is the last element in subsequence of length new_lis_len-1
         pred[i] = min_end_index[new_lis_len-1]
