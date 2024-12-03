@@ -1,24 +1,23 @@
 import time
-# from test import Sequences
 
 # the recursive step of the naive solution for finding
-# the LIS that includes the final element in the inputted list
+# the LIS in arr[0:idx] that includes the element at idx
 #
 # this method should not be called directly, use naive_lis(arr) instead
-def naive_lis_recursive(subarr: list[int]) -> list[int]:
-    if len(subarr) <= 1:
-        return subarr
-    
-    max_lis = [subarr[-1]]
+def naive_lis_ending_at_idx(arr: list[int], idx: int) -> list[int]:
+    if idx == 0:
+        return [arr[0]]
+        
+    max_lis = [arr[idx]]
 
-    for i in range(len(subarr)):
-        if subarr[i] < subarr[-1]:
-            lis_i = naive_lis_recursive(subarr[:i+1])
+    for x in range(idx):
+        if arr[x] < arr[idx]:
+            lis_i = naive_lis_ending_at_idx(arr, x)
             if len(max_lis) < len(lis_i) + 1:
                 max_lis = lis_i
     
-    if len(max_lis) > 0 and max_lis[-1] < subarr[-1]:
-        max_lis.append(subarr[-1])
+    if max_lis[-1] < arr[idx]:
+        max_lis.append(arr[idx])
     
     return max_lis
 
@@ -28,7 +27,7 @@ def naive_lis(arr: list[int]) -> list[int]:
 
     # calculates the LIS for arr[0:0], arr[0:1], arr[0:2], ... , arr[0:n] and set max_lis to the longest solution
     for i in range(len(arr)):
-        lis_i = naive_lis_recursive(arr[:i+1])
+        lis_i = naive_lis_ending_at_idx(arr, i)
         if len(max_lis) < len(lis_i):
             max_lis = lis_i
     return max_lis
