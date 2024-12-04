@@ -85,11 +85,17 @@ def test():
         writer.writerows(results)
 
     results = []
-    results.extend(run_test(Sequences.strictly_increase, n_values + [10 ** 2, 10 ** 3, 10 ** 4, 10 ** 5, 10 ** 6, 10 ** 7], verbose=True, naive=False))
-    results.extend(run_test(Sequences.strictly_decrease, n_values + [10 ** 2, 10 ** 4, 10 ** 5, 10 ** 6, 10 ** 7], verbose=True, naive=False))
-    results.extend(run_test(Sequences.alternating_high_low, n_values + [10 ** 2, 10 ** 3, 10 ** 4, 10 ** 5, 10 ** 6, 10 ** 7], verbose=True, naive=False))
-    results.extend(run_test(Sequences.zig_zag, n_values + [10 ** 2, 10 ** 3, 10 ** 4, 10 ** 5, 10 ** 6, 10 ** 7], verbose=True, naive=False))
-    results.extend(run_test(Sequences.random, n_values + [10 ** 2, 10 ** 3, 10 ** 4, 10 ** 5, 10 ** 6, 10 ** 7], verbose=True, naive=False))
+    nums = []
+    current = 150000
+    for _ in range(15):
+        current += 150000
+        nums.append(current)
+    
+    results.extend(run_test(Sequences.strictly_increase, n_values + nums, verbose=True, naive=False))
+    results.extend(run_test(Sequences.strictly_decrease, n_values + nums, verbose=True, naive=False))
+    results.extend(run_test(Sequences.alternating_high_low, n_values + nums, verbose=True, naive=False))
+    results.extend(run_test(Sequences.zig_zag, n_values + nums, verbose=True, naive=False))
+    results.extend(run_test(Sequences.random, n_values + nums, verbose=True, naive=False))
 
   # Write results to a CSV file
     with open("test_results_efficient.csv", "w", newline="") as csvfile:
